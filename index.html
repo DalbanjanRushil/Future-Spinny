@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudentForge - Future Success Navigator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .background-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      backdrop-filter: blur(10px);
+      animation: float-orb 8s infinite ease-in-out;
+    }
+
+    .orb-1 { width: 100px; height: 100px; top: 10%; left: 10%; animation-delay: 0s; }
+    .orb-2 { width: 150px; height: 150px; top: 70%; right: 15%; animation-delay: 2s; }
+    .orb-3 { width: 80px; height: 80px; bottom: 20%; left: 20%; animation-delay: 4s; }
+    .orb-4 { width: 120px; height: 120px; top: 30%; right: 30%; animation-delay: 6s; }
+
+    @keyframes float-orb {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 0.6; }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      z-index: 10;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 3.8rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+      background-size: 300% 300%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+      animation: gradient-shift 3s ease infinite;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      font-style: italic;
+    }
+
+    .category-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 35px;
+      z-index: 10;
+      position: relative;
+      max-width: 800px;
+    }
+
+    .category-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 15px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+    }
+
+    .category-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .category-btn.active {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .wheel-container {
+      position: relative;
+      margin: 30px 0;
+      z-index: 10;
+    }
+
+    .wheel {
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        #ff6b6b 0deg 30deg,
+        #4ecdc4 30deg 60deg,
+        #45b7d1 60deg 90deg,
+        #96ceb4 90deg 120deg,
+        #feca57 120deg 150deg,
+        #ff9ff3 150deg 180deg,
+        #54a0ff 180deg 210deg,
+        #5f27cd 210deg 240deg,
+        #00d2d3 240deg 270deg,
+        #ff9f43 270deg 300deg,
+        #ee5a6f 300deg 330deg,
+        #c44569 330deg 360deg
+      );
+      transition: transform 6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      border: 10px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 
+        0 0 0 5px rgba(255, 255, 255, 0.1),
+        0 0 60px rgba(0, 0, 0, 0.4),
+        inset 0 0 60px rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .wheel::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-bottom: 28px solid #fff;
+      z-index: 10;
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+    }
+
+    .spin-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 2.2rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3);
+      border: 5px solid rgba(255, 255, 255, 0.4);
+      font-weight: bold;
+    }
+
+    .spin-btn:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.5),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .spin-btn:active {
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+
+    .task-card {
+      max-width: 600px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(25px);
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      margin-top: 25px;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      position: relative;
+    }
+
+    .task-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .task-text {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .task-category {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-top: 10px;
+      padding: 5px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .spinning {
+      animation: spin-pulse 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes spin-pulse {
+      from { 
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%) scale(1);
+      }
+      to { 
+        box-shadow: 0 15px 45px rgba(102, 126, 234, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.5);
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+
+    .stats {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 10px 15px;
+      border-radius: 15px;
+      font-size: 0.9rem;
+      z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2.8rem; }
+      .wheel { width: 320px; height: 320px; }
+      .spin-btn { width: 100px; height: 100px; font-size: 1.8rem; }
+      .category-selector { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-elements">
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+    <div class="floating-orb orb-4"></div>
+  </div>
+
+  <div class="stats" id="stats">Spins: 0</div>
+  
+  <div class="header">
+    <h1>🎓 StudentForge</h1>
+    <p class="subtitle">Future Success Navigator</p>
+    <p class="tagline">Forge your path to excellence, one skill at a time</p>
+  </div>
+
+  <div class="category-selector">
+    <button class="category-btn active" onclick="setCategory('financial')" data-category="financial">💰 Financial Intelligence</button>
+    <button class="category-btn" onclick="setCategory('career')" data-category="career">🚀 Career Mastery</button>
+    <button class="category-btn" onclick="setCategory('learning')" data-category="learning">📚 Learning Excellence</button>
+    <button class="category-btn" onclick="setCategory('skills')" data-category="skills">🛠️ Life Skills</button>
+    <button class="category-btn" onclick="setCategory('networking')" data-category="networking">🤝 Network Building</button>
+    <button class="category-btn" onclick="setCategory('exploration')" data-category="exploration">🌍 Future Exploration</button>
+  </div>
+
+  <div class="wheel-container">
+    <div class="wheel" id="wheel"></div>
+    <button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎯</button>
+  </div>
+
+  <div class="task-card">
+    <div class="task-text" id="result">
+      <span class="task-emoji">🎲</span>
+      Choose your growth path and spin to unlock your next success mission!
+    </div>
+  </div>
+
+  <script>
+    let currentCategory = 'financial';
+    let isSpinning = false;
+    let spinCount = 0;
+    let totalRotation = 0;
+    
+    const wheel = document.getElementById('wheel');
+    const resultBox = document.getElementById('result');
+    const spinBtn = document.getElementById('spinBtn');
+    const statsElement = document.getElementById('stats');
+
+    const studentTasks = {
+      financial: [
+        '📖 Read "Rich Dad Poor Dad" by Robert Kiyosaki - understand money mindset',
+        '💡 Research and compare 5 different types of savings accounts (high-yield, money market, CDs)',
+        '📊 Learn about compound interest - calculate how ₹1000 monthly SIP grows in 10 years',
+        '🎯 Create a personal budget using the 50/30/20 rule for your pocket money/part-time income',
+        '💳 Research different types of credit cards and their benefits for students',
+        '📈 Learn about mutual funds vs stocks vs bonds - understand risk vs return',
+        '🏦 Visit a bank and open your first savings account if you haven\'t already',
+        '💰 Research cryptocurrency basics - Bitcoin, Ethereum, and blockchain technology',
+        '📚 Study different investment instruments: PPF, ELSS, Index Funds, Real Estate',
+        '🔍 Learn about tax planning - understand income tax basics and deductions',
+        '💼 Research emergency fund importance - aim for 6 months of expenses',
+        '📱 Download and explore investment apps like Zerodha, Groww, or Paytm Money',
+        '🎓 Take a free online course on financial literacy from platforms like Khan Academy',
+        '💸 Learn about inflation and how it affects your purchasing power over time',
+        '🏠 Research different types of loans - education, home, personal, and their interest rates'
+      ],
+      career: [
+        '🎯 Research top 10 careers in your field with salary ranges and growth prospects',
+        '💼 Create a professional LinkedIn profile with a compelling headline and summary',
+        '📝 Write a modern resume using ATS-friendly templates and keywords',
+        '🤝 Conduct 3 informational interviews with professionals in your dream field',
+        '🎨 Build a portfolio website showcasing your projects and achievements',
+        '📊 Research companies you want to work for - their culture, values, and requirements',
+        '🎪 Learn about the gig economy - freelancing, consulting, and remote work opportunities',
+        '📈 Identify and develop 3 in-demand skills for your industry using online courses',
+        '🌐 Join professional associations and communities in your field',
+        '🎯 Set specific career milestones for the next 2, 5, and 10 years',
+        '💡 Research startup ecosystem in your city - potential opportunities and internships',
+        '🏆 Prepare for common interview questions and practice with mock interviews',
+        '📱 Learn about personal branding and how to showcase your expertise online',
+        '🎓 Research advanced degrees, certifications, and their ROI for your career',
+        '🌟 Study successful people in your field - their career paths and key decisions'
+      ],
+      learning: [
+        '🧠 Learn speed reading techniques to increase your reading efficiency by 2x',
+        '📚 Read "Atomic Habits" by James Clear and implement 3 new study habits',
+        '🎯 Master the Pomodoro Technique and track your productivity for one week',
+        '💡 Learn memory palace technique for better retention of complex information',
+        '📖 Read "The 7 Habits of Highly Effective People" and apply principles to your studies',
+        '🎨 Explore different learning styles and identify which works best for you',
+        '📊 Use spaced repetition software like Anki for better long-term retention',
+        '🔍 Learn Cornell Note-taking method and apply it to your next 5 lectures',
+        '🎓 Take a free course on Coursera, edX, or Khan Academy in a subject you\'re curious about',
+        '💻 Learn touch typing to increase your typing speed to 60+ WPM',
+        '🧩 Practice critical thinking with logic puzzles and brain teasers daily',
+        '📱 Use active recall techniques instead of passive reading for better understanding',
+        '🎯 Set SMART learning goals for each subject and track your progress',
+        '🌐 Join online study groups and discussion forums in your areas of interest',
+        '📚 Read "Make It Stick" by Peter Brown to understand the science of learning'
+      ],
+      skills: [
+        '💻 Learn basic coding - start with Python or JavaScript using free resources',
+        '🎨 Master Microsoft Office Suite or Google Workspace to professional level',
+        '📊 Learn data analysis using Excel or Google Sheets with pivot tables and charts',
+        '🗣️ Join Toastmasters or practice public speaking for 15 minutes daily',
+        '🤝 Learn negotiation skills - practice with daily situations like bargaining',
+        '⏰ Master time management using tools like Calendly, Notion, or Todoist',
+        '🎯 Learn project management basics - understand Gantt charts and Agile methodology',
+        '💡 Develop emotional intelligence by reading "Emotional Intelligence 2.0"',
+        '🌐 Learn a new language using Duolingo or Babbel for 30 minutes daily',
+        '🎪 Learn basic design skills using Canva or Figma for presentations',
+        '📱 Understand digital marketing basics - SEO, social media, and content creation',
+        '🔧 Learn basic troubleshooting for computers and smartphones',
+        '🎭 Practice active listening and empathy in your daily conversations',
+        '📈 Learn basic statistics and data interpretation for informed decision making',
+        '🛠️ Develop problem-solving skills using design thinking methodology'
+      ],
+      networking: [
+        '🤝 Attend 2 professional networking events or webinars in your field this month',
+        '📱 Connect with 5 alumni from your college working in your area of interest',
+        '🎯 Join 3 professional groups on LinkedIn related to your career interests',
+        '💼 Attend career fairs and collect contacts from at least 10 companies',
+        '🌐 Participate in online forums and communities in your field of study',
+        '🎪 Volunteer for events or causes you care about to meet like-minded people',
+        '📧 Send personalized connection requests to 10 professionals you admire',
+        '🎓 Join student organizations and take leadership roles to expand your network',
+        '💡 Attend startup events and entrepreneurship meetups in your city',
+        '🤝 Offer to help others with their projects to build meaningful relationships',
+        '📊 Create valuable content and share insights to attract professional connections',
+        '🎯 Find a mentor in your field and schedule monthly check-ins',
+        '🌟 Attend industry conferences (virtual or in-person) and actively participate',
+        '💼 Reach out to professionals for coffee chats or informational interviews',
+        '🎨 Collaborate on projects with peers to build a strong professional network'
+      ],
+      exploration: [
+        '🌍 Research study abroad programs and their impact on career prospects',
+        '🎯 Shadow professionals in 3 different careers you\'re considering',
+        '💡 Explore emerging fields like AI, renewable energy, biotech, and space technology',
+        '🏢 Research the future of work - remote work, automation, and new job categories',
+        '🎪 Attend virtual company tours and webinars to understand different industries',
+        '📊 Analyze job market trends and identify skills that will be in demand',
+        '🌐 Research international career opportunities and visa requirements',
+        '🎓 Explore alternative education paths - bootcamps, online degrees, micro-credentials',
+        '💼 Investigate entrepreneurship opportunities and startup ecosystems',
+        '🔍 Research graduate school options and their ROI for your career goals',
+        '🎯 Explore different work environments - corporate, startup, NGO, government',
+        '🌟 Study how technology is transforming your field of interest',
+        '📱 Research digital nomad lifestyle and location-independent careers',
+        '🎨 Explore creative industries and how they intersect with your interests',
+        '🚀 Investigate space industry careers and required qualifications'
+      ]
+    };
+
+    function setCategory(category) {
+      if (isSpinning) return;
+      
+      currentCategory = category;
+      
+      // Update active button
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`[data-category="${category}"]`).classList.add('active');
+      
+      // Update result text
+      const categoryInfo = {
+        financial: { emoji: '💰', name: 'Financial Intelligence' },
+        career: { emoji: '🚀', name: 'Career Mastery' },
+        learning: { emoji: '📚', name: 'Learning Excellence' },
+        skills: { emoji: '🛠️', name: 'Life Skills' },
+        networking: { emoji: '🤝', name: 'Network Building' },
+        exploration: { emoji: '🌍', name: 'Future Exploration' }
+      };
+      
+      const info = categoryInfo[category];
+      resultBox.innerHTML = `
+        <span class="task-emoji">${info.emoji}</span>
+        <strong>${info.name}</strong> path selected!<br>
+        Ready to unlock your next growth mission?
+      `;
+    }
+
+    function spinWheel() {
+      if (isSpinning) return;
+      
+      isSpinning = true;
+      spinCount++;
+      spinBtn.classList.add('spinning');
+      
+      // Increase rotation each time for more dynamic spins
+      const baseRotation = 1800; // 5 full rotations
+      const additionalRotation = (spinCount - 1) * 360; // Extra rotation based on spin count
+      const randomRotation = Math.floor(Math.random() * 720) + 360; // 1-3 additional rotations
+      
+      totalRotation += baseRotation + additionalRotation + randomRotation;
+      
+      wheel.style.transform = `rotate(${totalRotation}deg)`;
+      
+      // Update stats
+      statsElement.textContent = `Spins: ${spinCount}`;
+      
+      // Get random task
+      const tasks = studentTasks[currentCategory];
+      const randomIndex = Math.floor(Math.random() * tasks.length);
+      const selectedTask = tasks[randomIndex];
+      
+      // Show loading message
+      resultBox.innerHTML = `
+        <span class="task-emoji">🌪️</span>
+        <strong>Forging your success path...</strong><br>
+        Analyzing the best growth opportunity for you!
+      `;
+      
+      // Show result after animation
+      setTimeout(() => {
+        const categoryInfo = {
+          financial: '💰 Financial Intelligence',
+          career: '🚀 Career Mastery',
+          learning: '📚 Learning Excellence',
+          skills: '🛠️ Life Skills',
+          networking: '🤝 Network Building',
+          exploration: '🌍 Future Exploration'
+        };
+        
+        resultBox.innerHTML = `
+          <span class="task-emoji">🎯</span>
+          <div class="task-text">
+            <strong>Your Success Mission:</strong><br>
+            ${selectedTask}
+          </div>
+          <div class="task-category">${categoryInfo[currentCategory]}</div>
+        `;
+        
+        isSpinning = false;
+        spinBtn.classList.remove('spinning');
+      }, 6500);
+    }
+
+    // Initialize
+    setCategory('financial');
+  </script>
+</body>
+</html>
